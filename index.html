@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title></title>
+	<script src="lib/jquery-3.3.1.min.js"></script>
+	<!-- UI-->
+	<link type="text/css" href="css/checkbox.css" rel="stylesheet">
+	<!-- sweetalert -->
+	<link type="text/css" href="css/sweetalert/6.10.3/sweetalert2.css" rel="stylesheet">
+	<script src="lib/sweetalert/6.10.3/sweetalert2.js"></script>
+	<!-- wait -->
+	<script src="lib/bootstrap/3.3.7/bootstrap.min.js"></script>
+	<script src="lib/bootstrap/bootstrap-waitingfor.js"></script>
+	<link rel="stylesheet" href="css/bootstrap/3.3.7/bootstrap.min.css">
+
+<style type="text/css">
+.vertical-mode {
+    writing-mode: tb-rl;
+    -webkit-writing-mode: vertical-rl;      
+    writing-mode: vertical-rl;
+    text-align:right;
+}
+
+.tr-redThing {
+	background: #f9b3b3;
+}
+
+.tr-yellowThing {
+	background: #fbeac1;
+}
+
+.tr-whiteThing {
+	background: #FFFFFF;
+}
+
+.title {
+	color: #000000;
+	font: 18px Helvetica Neue,Helvetica,PingFang SC,sans-serif;
+	font-weight:bold;
+}
+
+.desp {
+	color: #000000;
+	font: 16px Helvetica Neue,Helvetica,PingFang SC,sans-serif;
+}
+
+.button {
+  background-color: #13ce66;
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 12px;
+  width: 120px;
+}
+
+
+.select-editable {
+     position:relative;
+     background-color:white;
+     border:solid #13ce66 1px;
+     width:300px;
+     height:18px;
+ }
+
+ .select-editable select {
+     position:absolute;
+     top:0px;
+     left:0px;
+     font-size:14px;
+     border:none;
+     width:300px;
+     margin:0;
+     height:16px;
+ }
+ .select-editable input {
+     position:absolute;
+     top:0px;
+     left:0px;
+     width:280px;
+     padding:1px;
+     font-size:12px;
+     border:none;
+     height:16px;
+ }
+
+ .select-editable select:focus, .select-editable input:focus {
+     outline:none;
+ }
+
+</style>
+<script type="text/javascript">
+
+var question1 = [
+				"公司有清楚的願景",
+				// "有清楚的願景在管理上是重要的",
+				// "公司具有競爭力的市場地位",
+				// "可以避免競爭對手模仿或進入",
+				// "公司發展需要更明確的競爭策略",
+				
+				// "公司產品在市場上具有競爭力",
+				// "有完整的財務管理",
+				// "對毛利/ 淨利/ 現金流量都能良好掌握",
+				// "財務上可以支持公司的發展目標",
+				// "我認為企業文化對企業經營很重要",
+
+				// "公司有可以吸引目標人才的企業文化",
+				// "相比於階層（權威）的組織文化，希望公司是較為平等的",
+				// "希望公司是較為透明的文化",
+				// "希望員工能夠參與討論決策",
+				// "公司成員具有追求成為卓越領導品牌的決心",
+
+				// "公司有明確的目標管理系統",
+				// "公司有3年以上的目標規劃",
+				// "如果有3年以上的計畫會有幫助",
+				// "公司每個階層都有清楚的目標",
+				// "成員對公司目標是熟悉清晰的",
+
+				// "員工清楚自己被期待完成的工作內容和標準",
+				// "公司目前有良好的組織設計和分工",
+				// "不同團隊之間權責分明",
+				// "不同團隊之間可以良好競爭或合作"
+				];
+
+var question2 = [
+				"公司具有清楚吸引人的雇主品牌",
+				// "有良好的管道可以蒐集CV和聯絡優秀人才",
+				// "有清楚的工作設計．工作不會太簡單或太難",
+				// "公司明確知道希望找的人才的標準",
+				// "公司已有結構化的面談流程",
+
+				// "面談流程是有鑑別力的",
+				// "能夠順利吸引人選加入",
+				// "能夠讓人選加入前對未來工作形成良好預期",
+				// "工作流程已良好設計",
+				// "重要工作流程已有明確方法和SOP",
+
+				// "如果是Jr. 員工，有足夠訓練可以勝任工作",
+				// "會希望讓組織成為學習型組織",
+				// "會希望良好的員工訓練成為公司的優勢",
+				// "公司能給員工合適的回饋，協助他成長",
+				// "員工對工作環境感到正面",
+
+				// "員工在工作時承擔很大的壓力",
+				// "員工可以得到明確指示",
+				// "公司員工對於公司整體感到滿意",
+				// "員工工時經常過長",
+				// "員工有充足休假",
+
+				// "公司有完整的績效評估系統",
+				// "公司有良善薪酬制度設計",
+				// "薪資制度可以吸引員工",
+				// "薪資制度可以留住員工",
+				// "薪資制度可以激勵員工"
+				];
+
+var gIPInfo = {};
+$.getJSON('http://ip-api.com/json?callback=?', function(data) {
+	gIPInfo = data;
+	// gIPInfo = JSON.stringify(data, null, 2);  
+});
+
+$(document).ready(function(){
+	console.log('ready');
+
+	if (getCookie('done') !== '')
+	{
+		console.log('did done');
+		swal({
+	        title: "謝謝您的參與",
+	        html: "已經填寫過了",
+	        type: "success",
+	        confirmButtonText:"確定"/*改這裡*/
+		});	
+	}
+
+	var count = 0;
+	question1.forEach(function(element) {
+		count++;
+		var title = count+'. '+element;
+		var html = addRow(title, count);
+		$('.Q1').append(html);
+	});
+	var lastCount = count;
+
+	question2.forEach(function(element) {
+		count++;
+		var title = (count-lastCount)+'. '+element;
+		var html = addRow(title, count);
+		$('.Q2').append(html);
+	});
+
+	
+	var html = addSelect("Q1", 3, question1);
+	$('.Q1-Select').append(html);
+
+	var html = addSelect("Q2", 3, question2);
+	$('.Q2-Select').append(html);
+
+});
+
+function addRow(title, count)
+{
+	var html = "";
+	html+= "<tr class='tr"+count+"' onmouseover=\"this.className='tr-yellowThing';\" onmouseout=\"this.className='tr-whiteThing';\">";
+	html+= "  <td class='title"+count+"'>"+title+"</td>";
+	for (i=0; i<4; i++)
+	{
+		var value = '不符合';
+		switch (i)
+		{
+		case 0:
+			value = '不符合';
+			break;
+		case 1:
+			value = '有點不符合';
+			break;
+		case 2:
+			value = '有點符合';
+			break;
+		case 3:
+			value = '符合';
+			break;
+		}
+					
+		
+		html+= "  <td>";
+		html+= "	<div class='el-radio el-radio-green'>";
+		html+= "	<input class='input_option' type='radio' name='radio"+count+"' id='"+count+"_"+i+"' value='"+value+"'>";
+		html+= "	<label class='el-radio-style' for='"+count+"_"+i+"'></label>";
+		html+= "	</div>";
+		html+= "  </td>";	
+	}
+	html+= "</tr>";
+	return html;
+}
+
+function addSelect(id, max, question)
+{
+	var option = "";
+	for (j=0; j<question.length; j++)
+  	{
+  		var title = (j+1)+'. '+question[j];
+  		option+= "  <option value='"+title+"'>"+title+"</option>";
+  	}
+
+	var html = "";
+	for (i=0; i<max; i++)
+	{
+		// html+= "<input type='text' list='"+id+"_"+i+"' size='80%'>";
+		// html+= "<datalist id='"+id+"_"+i+"'>";
+	 //  	html+= option;
+		// html+= "</datalist>";
+		// html+= "<br>";	
+
+		html+= "<div class='select-editable'>";
+		html+= "  <select onchange='this.nextElementSibling.value=this.value'>";
+        html+=      option;
+    	html+= "  </select>";
+    	html+= "  <input type='text' value=''>";	
+    	html+= "</div>";
+    	html+= "<br>";
+	}
+
+
+
+	return html;
+}
+
+function onSend()
+{
+	var result = {};
+	result['ans'] = {};
+	result.ans['select'] = [];
+	result.ans['input'] = [];
+
+	var check = true;
+	var total = question1.length + question2.length;
+	for (i=0; i<total; i++)
+	{
+		var value = $('input[name=radio'+(i+1)+']:checked').val();	
+		if (value === undefined)
+		{
+			check = false;
+			$('input[name=radio'+(i+1)+']')[0].parentElement.parentElement.parentElement.className = 'tr-redThing';
+			value = 'N/A';
+		}
+
+		var item = {
+			"Q" : $('.title'+(i+1)).text(),
+			"A" : value
+		};
+		
+		result.ans['select'].push(item);
+	}
+
+
+	var ans = getInput('.Q1-Select');
+	var item = {
+		"Q" : "Q1",
+		"A" : ans
+	};
+	result.ans['input'].push(item);
+
+	var ans = getInput('.Q2-Select');
+	var item = {
+		"Q" : "Q2",
+		"A" : ans
+	};
+	result.ans['input'].push(item);
+
+	result['ipinfo'] = gIPInfo;
+	result['sheet'] = 'Sheet2';
+
+	// var ans1 = [];
+	// var objs = $('.Q1-Select').children('.select-editable')
+	// for (i=0; i<objs.length; i++)
+	// {
+	// 	var value = $(objs[i]).find('input').val();
+	// 	if (ans1.includes(value) || value == "")
+	// 	{
+	// 		check = false;
+	// 		console.log('same');
+	// 		// objs[i].className = 'tr-redThing';
+	// 		$(objs[i]).find('input').addClass('tr-redThing');
+	// 	}else{
+	// 		// objs[i].className = 'tr-whiteThing';
+	// 		$(objs[i]).find('input').removeClass('tr-redThing');
+	// 	}
+	// 	ans1.push(value);
+	// }
+
+
+	// var ans2 = [];
+	// var objs = $('.Q2-Select').children('.select-editable')
+	// for (i=0; i<objs.length; i++)
+	// {
+	// 	var value = $(objs[i]).find('input').val();
+	// 	if (ans2.includes(value) || value == "")
+	// 	{
+	// 		check = false;
+	// 		console.log('same');
+	// 		$(objs[i]).find('input').addClass('tr-redThing');
+	// 	}else{
+	// 		$(objs[i]).find('input').removeClass('tr-redThing');
+	// 	}
+	// 	ans2.push(value);
+	// }
+	
+
+	
+
+
+	if (check)
+	{
+
+		waitingDialog.show('上傳中請稍候...');
+
+		var payload = JSON.stringify(result, null, 2);  
+		$.ajax({
+		    type: "post",
+		    data: {
+		      "api" : 0,	
+		      "payload" : payload
+		    },
+		    url: 'https://script.google.com/macros/s/AKfycbxw5WzbKLVgYdoZ2vdjvqC-gjvVBOv1S07Usm9ZaCLNv0vZdXk/exec',
+		    error: function(ajaxContext) {
+		    	waitingDialog.hide();
+		    	// console.log(ajaxContext);
+		    },
+		    success: function(json) {
+		      //console.log("success"); 
+		      var jObj = JSON.parse(json);
+		      //console.log(jObj); 
+		      var code = jObj.code;
+		      var uuid = jObj.uuid;
+		      // console.log('code='+code+' uuid='+uuid); 
+		      waitingDialog.hide();
+
+		      setCookie('done', uuid, 7);
+
+	          swal({
+			        title: "謝謝您的參與",
+			        html: "已經成功儲存",
+			        type: "success",
+			        confirmButtonText:"確定"/*改這裡*/
+				});	
+		    }
+	  	});
+		
+	}
+	else
+	{
+		swal({
+	        title: "尚未完成",
+	        html: "還有欄位尚未填寫到",
+	        type: "warning",
+	        confirmButtonText:"確定"/*改這裡*/
+		});	
+	}
+
+}
+
+function getInput(id)
+{
+	var ans = [];
+	var objs = $(id).children('.select-editable')
+	for (i=0; i<objs.length; i++)
+	{
+		var value = $(objs[i]).find('input').val();
+		if (ans.includes(value) || value == "")
+		{
+			check = false;
+			// console.log('same');
+			// objs[i].className = 'tr-redThing';
+			$(objs[i]).find('input').addClass('tr-redThing');
+		}else{
+			// objs[i].className = 'tr-whiteThing';
+			$(objs[i]).find('input').removeClass('tr-redThing');
+		}
+		ans.push(value);
+	}
+	return ans;
+}
+
+function setCookie(cname, cvalue,exdays)
+{
+  var d = new Date();
+  d.setTime(d.getTime()+(exdays*24*60*60*1000));
+  var expires = "expires="+d.toGMTString();
+  document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+
+</script>
+</head>
+<body>
+
+<div class="title">公司管理衡鑑</div>
+<div class="desp">請您依照您公司目前的狀況與下列敘述的相符程度進行回答：</div>
+<table class="Q1">
+	<tr>
+		<td width="90%">
+		<td style="height:150px;"><span class="vertical-mode">不符合</span></td>
+		<td style="height:150px;"><span class="vertical-mode">有點不符合</span></td>
+		<td style="height:150px;"><span class="vertical-mode">有點符合</span></td>
+		<td style="height:150px;"><span class="vertical-mode">符合</span></td>
+	</tr>
+</table>
+<br>
+<div>關於公司管理，請問未來1年最想強化的3件事是(不限上面選項)</div>
+<div class="Q1-Select"></div>
+
+
+
+<br>
+<br>	
+
+<div class="title">人力資源管理衡鑑</div>
+<div class="desp">關於人力資源管理，公司目前的狀況與下列敘述的相符程度為：</div>
+<table class="Q2">
+	<tr>
+		<td width="90%">
+		<td style="height:150px;"><span class="vertical-mode">不符合</span></td>
+		<td style="height:150px;"><span class="vertical-mode">有點不符合</span></td>
+		<td style="height:150px;"><span class="vertical-mode">有點符合</span></td>
+		<td style="height:150px;"><span class="vertical-mode">符合</span></td>
+	</tr>
+</table>
+<br>
+<div>關於人力資源管理未來1年最想強化的3件事是（不限上面選項）</div>
+<div class="Q2-Select"></div>
+<br>
+<br>
+<center>
+<div class="button" onclick="onSend()">送出</div>
+</center>
+</body>
+</html>
